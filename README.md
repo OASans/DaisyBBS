@@ -1,1 +1,1 @@
-Chrysanthemum BBS
+Daisy BBS
