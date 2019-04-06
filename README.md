@@ -1,2 +1,1 @@
-Chrysanthemum BBS
-using django
+Daisy BBS
