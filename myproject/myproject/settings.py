@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'boards',
     'accounts',
+    'stocks',
 
     'widget_tweaks',
 ]

@@ -20,6 +20,7 @@ from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from boards import views
 from accounts import views as account_views
+from stocks import views as stock_views
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -59,4 +60,7 @@ urlpatterns = [
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',views.PostUpdateView.as_view(),name='edit_post'),
 
     url(r'^settings/account/$',account_views.UserUpdateView.as_view(),name='my_account'),
+
+    url(r'^stockhome/$',stock_views.stockhome,name='stockhome'),
+
 ]
