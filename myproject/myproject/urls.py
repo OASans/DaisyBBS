@@ -63,4 +63,6 @@ urlpatterns = [
 
     url(r'^stockhome/$',stock_views.stockhome,name='stockhome'),
 
+    #url(r'stockhome/')
+
 ]
