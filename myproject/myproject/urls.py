@@ -63,6 +63,10 @@ urlpatterns = [
 
     url(r'^stockhome/$',stock_views.stockhome,name='stockhome'),
 
-    #url(r'stockhome/')
+    #url(r'stockhome/\d{6}', stock_views.stockinfo, name='stockinfo')
+
+    path('stockhome/<stock_id>/', stock_views.stockinfo, name='stockinfo'),
+
+    path('news/',stock_views.news, name='news'),
 
 ]

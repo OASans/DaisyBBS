@@ -8,6 +8,9 @@ from django.http import HttpResponse
 import tushare as ts
 import pandas as pd
 import json
+import time
+import datetime
+from dateutil.relativedelta import relativedelta
 
 mytoken = 'f78629cf67fcc2923a7feeed2000b1e63760507375d34391ad7b9bc6'
 
@@ -35,28 +38,61 @@ mytoken = 'f78629cf67fcc2923a7feeed2000b1e63760507375d34391ad7b9bc6'
 
 ###################################################
 
-data = ts.get_hist_data('600848', start='2017-06-05', end='2018-01-09')
-data.reset_index(inplace=True)
-data.sort_index(ascending=False,inplace=True)
-data.reset_index(drop=True, inplace=True)
+# data = ts.get_hist_data('600848', start='2017-06-05', end='2018-01-09')
+# data.reset_index(inplace=True)
+# data.sort_index(ascending=False,inplace=True)
+# data.reset_index(drop=True, inplace=True)
 
-# api = ts.pro_api(mytoken)
+#api = ts.pro_api(mytoken)
 # data = api.daily(ts_code='000001.SZ',start_date='20180101',end_date='20190101')
 # data = data.sort_index(ascending=False)
 # data['trade_date']=pd.to_datetime(data['trade_date']).dt.strftime('%m/%d/%Y')
 
-column_list = []
-for row in data:
-    column_list.append(row)
-jsonlist = []
-for index in range(data[column_list[0]].size):
-    dict = {}
-    for row in data:
-        dict[row] = data[row][index]
-    jsonlist.append(dict)
+pro = ts.pro_api()
+stock_list = pro.query('stock_basic', exchange='', list_status='L',
+                       fields='ts_code,symbol,name,area,industry,market')
+
+def trans_json(arr):
+    column_list = []
+    for row in arr:
+        column_list.append(row)
+    jsonlist = []
+    for index in range(arr[column_list[0]].size):
+        dict = {}
+        for row in arr:
+            dict[row] = arr[row][index]
+        jsonlist.append(dict)
+    return jsonlist
+
+def stockinfo(request, stock_id):
+    id = stock_id[0:6]
+    #+'.'+stock_id[6:]
+    info_id = stock_id
+    data = ts.get_hist_data(id)
+    info = pro.daily_basic(ts_code=info_id, trade_date=time.strftime("%Y%m%d",time.localtime()))
+    day = pro.daily(ts_code=info_id, start_date=time.strftime("%Y%m%d",time.localtime()))
+    name = pro.namechange(ts_code=info_id, end_date='None', fields='name')
+    data.reset_index(inplace=True)
+    data.sort_index(ascending=False,inplace=True)
+    data.reset_index(drop=True, inplace=True)
+    return render(request,"stock_info.html", {'stock': json.dumps(trans_json(data)), 'info': trans_json(info),
+                                              'name': trans_json(name), 'day': trans_json(day)})
+
+
 
 def stockhome(request):
 
-     return render(request,"stock_home.html",{'stock': json.dumps(jsonlist)})
+    return render(request,"stock_home.html", {'stocklist': trans_json(stock_list)})
+
+
+
+def news(request):
+    date=datetime.date.today()
+    pre_date=date-relativedelta(days=+1)
+    df = pro.news(src='sina', start_date=pre_date.strftime('%Y%m%d'),
+                  end_date=date.strftime('%Y%m%d'))
+
+    print(df)
+    return render(request,"news.html",{'news':trans_json(df)})
 
 
