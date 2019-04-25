@@ -283,7 +283,7 @@
 
     </script>
 
-<div id="sub" style="width: 1200px; height: 400px;"></div>
+<div id="sub" style="width: 1200px; height: 400px; margin-bottom: 50px"></div>
  <script type="text/javascript">
     var myChart = echarts.init(document.getElementById('sub'));
 
@@ -335,6 +335,7 @@
             }
         },
         tooltip: {},
+
         xAxis: {
             data: xAxisData,
             silent: false,
@@ -343,6 +344,21 @@
             }
         },
         yAxis: {},
+        dataZoom: [     //用于区域缩放
+                {
+                    filterMode:'filter',    //当前数据窗口外的数据被过滤掉来达到数据窗口缩放的效果  默认值filter
+                    type: 'inside', //内置型数据区域缩放组件
+                    start: 50,      //数据窗口范围的起始百分比
+                    end: 100        //数据窗口范围的结束百分比
+                },
+                {
+                    show: true,
+                    type: 'slider', //滑动条型数据区域缩放组件
+                    y: '90%',
+                    start: 50,
+                    end: 100
+                }
+            ],
         series: [{
             name: '成交量',
             type: 'bar',
@@ -360,7 +376,7 @@
  </script>
 
     <table class="table table-hover">
-        <legend>当日交易信息</legend>
+        <legend>交易信息</legend>
         <thead class="thead-light">
             <tr>
                 <th>交易日期</th>
@@ -394,7 +410,7 @@
     </table>
 
     <table class="table table-hover">
-        <legend>公司基本信息</legend>
+        <legend>公司简况</legend>
         <thead class="thead-light">
             <tr>
                 <th>换手率</th>

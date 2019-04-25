@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.views.generic import UpdateView,ListView, View
 # from .models import Stock
@@ -11,6 +11,7 @@ import json
 import time
 import datetime
 from dateutil.relativedelta import relativedelta
+from django import forms
 
 mytoken = 'f78629cf67fcc2923a7feeed2000b1e63760507375d34391ad7b9bc6'
 
@@ -65,22 +66,33 @@ def trans_json(arr):
     return jsonlist
 
 def stockinfo(request, stock_id):
+    date = datetime.date.today()
+    pre_date = date - relativedelta(days=+1)
     id = stock_id[0:6]
     #+'.'+stock_id[6:]
     info_id = stock_id
     data = ts.get_hist_data(id)
-    info = pro.daily_basic(ts_code=info_id, trade_date=time.strftime("%Y%m%d",time.localtime()))
-    day = pro.daily(ts_code=info_id, start_date=time.strftime("%Y%m%d",time.localtime()))
-    name = pro.namechange(ts_code=info_id, end_date='None', fields='name')
+    info = pro.daily_basic(ts_code=info_id, trade_date=pre_date.strftime('%Y%m%d'))
+    day = pro.daily(ts_code=info_id, start_date=pre_date.strftime('%Y%m%d'))
+    #name = pro.namechange(ts_code=info_id, end_date='None', fields='name')
+    name = pro.namechange(ts_code=info_id, fields='name')
     data.reset_index(inplace=True)
     data.sort_index(ascending=False,inplace=True)
     data.reset_index(drop=True, inplace=True)
+    print(info_id)
+    print(name)
     return render(request,"stock_info.html", {'stock': json.dumps(trans_json(data)), 'info': trans_json(info),
                                               'name': trans_json(name), 'day': trans_json(day)})
 
 
 
 def stockhome(request):
+    print("test")
+    if request.method == 'POST':
+        print("post success")
+        ts_code = request.POST.get('ts_code')
+        return stockinfo(request, ts_code)
+    print("not success")
 
     return render(request,"stock_home.html", {'stocklist': trans_json(stock_list)})
 
@@ -88,11 +100,22 @@ def stockhome(request):
 
 def news(request):
     date=datetime.date.today()
-    pre_date=date-relativedelta(days=+1)
-    df = pro.news(src='sina', start_date=pre_date.strftime('%Y%m%d'),
-                  end_date=date.strftime('%Y%m%d'))
-
+    pre_date=date-relativedelta(days=-1)
+    print(date.strftime('%Y%m%d'))
+    print(pre_date.strftime('%Y%m%d'))
+    df = pro.news(src='sina', start_date=date.strftime('%Y%m%d'), end_date=pre_date.strftime('%Y%m%d'))
     print(df)
     return render(request,"news.html",{'news':trans_json(df)})
+
+
+
+# def check(request):
+#     print('test')
+#     if request.method == 'POST':
+#         ts_code = request.POST.get('ts_code')
+#         return redirect('stockinfo', ts_code)
+#     return render(request,"stock_home.html", {'stocklist': trans_json(stock_list)})
+
+
 
 

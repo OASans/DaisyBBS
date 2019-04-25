@@ -67,6 +67,9 @@ urlpatterns = [
 
     path('stockhome/<stock_id>/', stock_views.stockinfo, name='stockinfo'),
 
+
     path('news/',stock_views.news, name='news'),
+
+    # path('portfolio/',stock_views.cal_portfolio, name='portfolio'),
 
 ]

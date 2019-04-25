@@ -5,6 +5,21 @@
 {% endblock %}
 
 {% block content %}
+<div class="container" style="margin-bottom: 20px">
+    <div class="input-group" style="width: 400px;text-align: left">
+        <form method="post" class="form-inline" novalidate>
+            {% csrf_token %}
+            <input style="margin-right: 5px" type="text" class="form-control" name="ts_code" placeholder="输入要查询的股票代码">
+            <button type="submit" class="btn-secondary">Go!</button>
+                <!--<script type="text/javascript">-->
+                 <!--function  mymethon(){-->
+                        <!--var a=document.getElementById("ts_code").value;-->
+                        <!--return a-->
+                   <!--}-->
+                 <!--</script>-->
+        </form>
+    </div>
+</div>
 
     <table class="table table-hover">
         <thead class="thead-dark">
