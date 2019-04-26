@@ -439,5 +439,33 @@
         </tbody>
     </table>
 
+    <table class="table table-hover">
+        <legend>业绩快报</legend>
+        <thead class="thead-light">
+            <tr>
+                <th>公告日期</th>
+                <th>营业收入(元)</th>
+                <th>营业利润(元)</th>
+                <th>净利润(元)</th>
+                <th>总资产(元)</th>
+                <th>净资产收益率(%)</th>
+                <th>每股收益(元)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in express %}
+            <tr>
+                <td class="align-middle">{{stock.ann_date}}</td>
+                <td class="align-middle">{{stock.revenue}}</td>
+                <td class="align-middle">{{stock.operate_profit}}</td>
+                <td class="align-middle">{{stock.n_income}}</td>
+                <td class="align-middle">{{stock.total_assets}}</td>
+                <td class="align-middle">{{stock.diluted_roe}}</td>
+                <td class="align-middle">{{stock.diluted_eps}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}
 

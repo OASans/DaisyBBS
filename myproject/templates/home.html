@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item active">Boards</li>
+    <li class="breadcrumb-item active">Daisy论坛</li>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
             <tr>
                 <th>板块</th>
                 <th>回复数</th>
-                <th>发帖数</th>
+                <th>话题数</th>
                 <th>最后更新</th>
             </tr>
         </thead>
@@ -44,45 +44,3 @@
         </tbody>
     </table>
 {% endblock %}
-
-<!--{% load static %}<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-    <!--<meta charset="utf-8">-->
-    <!--<title>Boards</title>-->
-    <!--<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">-->
-<!--</head>-->
-<!--<body>-->
-
-<!--<div class="container">-->
-    <!--<ol class="breadcrumb my-4">-->
-            <!--<li class="breadcrumb-item active">Boards</li>-->
-    <!--</ol>-->
-
-    <!--<table class="table">-->
-        <!--<thead class="thead-inverse">-->
-            <!--<tr>-->
-                <!--<th>Board</th>-->
-                <!--<th>Posts</th>-->
-                <!--<th>Topics</th>-->
-                <!--<th>Last Post</th>-->
-            <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody>-->
-        <!--{% for board in boards %}-->
-            <!--<tr>-->
-                <!--<td>-->
-                    <!--<a href="{% url 'board_topics' board.pk %}">{{ board.name }}</a>-->
-                    <!--<small class="text-muted d-block">{{ board.description}}</small>-->
-                <!--</td>-->
-                <!--<td class="align-middle">0</td>-->
-                <!--<td class="align-middle">0</td>-->
-                <!--<td></td>-->
-            <!--</tr>-->
-        <!--{% endfor %}-->
-        <!--</tbody>-->
-    <!--</table>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->

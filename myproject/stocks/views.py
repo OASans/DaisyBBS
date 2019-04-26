@@ -65,6 +65,8 @@ def trans_json(arr):
         jsonlist.append(dict)
     return jsonlist
 
+
+
 def stockinfo(request, stock_id):
     date = datetime.date.today()
     pre_date = date - relativedelta(days=+1)
@@ -73,6 +75,7 @@ def stockinfo(request, stock_id):
     info_id = stock_id
     data = ts.get_hist_data(id)
     info = pro.daily_basic(ts_code=info_id, trade_date=pre_date.strftime('%Y%m%d'))
+    express = pro.express(ts_code=info_id,end_date=date.strftime('%Y%m%d'))
     day = pro.daily(ts_code=info_id, start_date=pre_date.strftime('%Y%m%d'))
     #name = pro.namechange(ts_code=info_id, end_date='None', fields='name')
     name = pro.namechange(ts_code=info_id, fields='name')
@@ -82,19 +85,19 @@ def stockinfo(request, stock_id):
     print(info_id)
     print(name)
     return render(request,"stock_info.html", {'stock': json.dumps(trans_json(data)), 'info': trans_json(info),
-                                              'name': trans_json(name), 'day': trans_json(day)})
+                                              'name': trans_json(name), 'day': trans_json(day), 'express': trans_json(express)})
 
 
 
 def stockhome(request):
-    print("test")
     if request.method == 'POST':
         print("post success")
         ts_code = request.POST.get('ts_code')
         return stockinfo(request, ts_code)
-    print("not success")
-
-    return render(request,"stock_home.html", {'stocklist': trans_json(stock_list)})
+    date = datetime.date.today()
+    top = pro.top_list(trade_date=(date - relativedelta(days=+1)).strftime('%Y%m%d')).head(10)
+    return render(request,"stock_home.html", {'stocklist': trans_json(stock_list),
+                                              'top':trans_json(top)})
 
 
 
